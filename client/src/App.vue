@@ -1,11 +1,16 @@
 <template>
   <div id="app">
     <common-header></common-header>
+    <div class="layui-main">
+      <router-view/>
+    </div>
+    <common-footer></common-footer>
   </div>
 </template>
 
 <script>
 import CommonHeader from '@/components/CommonHeader'
+import CommonFooter from '@/components/CommonFooter'
 export default {
   name: 'App',
   data(){
@@ -15,7 +20,8 @@ export default {
   },
   components: {
     // HelloWorld
-    CommonHeader
+    CommonHeader,
+    CommonFooter
   },
   mounted(){
     
@@ -23,7 +29,15 @@ export default {
 }
 </script>
 
-<style>
-@import '~@/assets/font/font.css'
-
+<style lang="scss">
+@import '~@/assets/font/font.css';
+#app{
+  height:100vh;
+  .layui-main{
+    width: 100%;
+    top: 61px;
+    // height: 86vh;
+    background-color: #f2f2f2;
+  }
+}
 </style>

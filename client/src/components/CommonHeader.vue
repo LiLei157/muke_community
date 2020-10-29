@@ -30,13 +30,13 @@
                 </ul>
                 <ul class="nav_user">
                     <li class="layui-nav-item">
-                        <a href="/"
+                        <a href="/#/login"
                             ><i class="iconfont icon-yonghu"></i>
                             <span>登录</span></a
                         >
                     </li>
                     <li class="layui-nav-item">
-                        <a href="/"><span>注册</span></a>
+                        <a href="/#/register"><span>注册</span></a>
                     </li>
                     <li class="layui-nav-item">
                         <a href="/"><i class="iconfont icon-QQ" /></a>

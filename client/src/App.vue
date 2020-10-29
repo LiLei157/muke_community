@@ -2,7 +2,7 @@
   <div id="app">
     <common-header></common-header>
     <div class="layui-main">
-      <router-view/>
+          <router-view class="animate__animated animate__fadeIn"></router-view>
     </div>
     <common-footer></common-footer>
   </div>
@@ -15,7 +15,7 @@ export default {
   name: 'App',
   data(){
     return{
-      
+        
     }
   },
   components: {
@@ -38,6 +38,7 @@ export default {
     top: 61px;
     // height: 86vh;
     background-color: #f2f2f2;
+    padding-top: 15px;
   }
 }
 </style>

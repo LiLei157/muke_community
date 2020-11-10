@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <button class="layui-btn" @click="submitLogin()">立即登录</button>
+                            <button class="layui-btn" @click="submitLogin">立即登录</button>
                         </div>
                     </form>
                 </div>
@@ -168,6 +168,7 @@
 </template>
 
 <script >
+import uuid4 from 'uuid/dist/v4'
 import { required,email} from 'vuelidate/lib/validators'
 export default {
     data() {
@@ -199,18 +200,28 @@ export default {
     },
     mounted(){
         this.getCode()
+        let sid
+        if(sessionStorage.getItem('sid')){
+            sid = sessionStorage.getItem('sid')
+        }else{
+            sid = uuid4()
+            sessionStorage.setItem('sid',sid)
+        }
     },
     methods:{
         submitLogin(){
-            // console.log(this.$v)
-            // if(this.$v.form.$invalid){
-            //     console.log('error')
-            // }else{
-            //     console.log('success')
-            // }
+            this.axios.post('/login/login',{
+                username:this.form.username,
+                password:this.form.password,
+                code:this.form.code,
+                sid:sessionStorage.getItem('sid')
+            }).then(res =>{
+                console.log(res);
+            })
         },
         getCode(){
-            this.axios.post('/users/getcode').then(res =>{   
+            let sid = sessionStorage.getItem('sid')
+            this.axios.get('/public/getCode',{params:{sid:sid}}).then(res =>{   
                 this.svg = res.data.data
                 // console.log(this.svg)
             }).catch(error =>{

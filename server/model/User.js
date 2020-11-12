@@ -4,10 +4,28 @@
 import mongoose from '../conf/DBHelper'
 const Schema = mongoose.Schema
 
-const UserModel = new Schema({
+const UserSchema = new Schema({
     username:{
         type:String,    
         index:{unique:true},    // 创建唯一索引
-        sparse:true     // 创建稀疏索引
-    }
+        sparse:true             // 创建稀疏索引
+    },
+    password:String,
+    name:{type:String},
+    create:{type:Date},
+    update:{type:Date},
 })
+UserSchema.pre('save',(next) =>{
+    // if(!this.create) return new Date() 
+    this.create = new Date()
+    next()
+})
+
+UserSchema.pre('update', (next) => {
+    this.update = new Date()
+    next()
+})
+
+const UserModel = mongoose.model('user',UserSchema)
+
+export default UserModel

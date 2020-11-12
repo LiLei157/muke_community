@@ -9,12 +9,13 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 import config from './conf/index'
+import errorHandler from './common/errorHandler'
 
 const index = require('./routes/index')
 import publicRouter from './routes/publicRouter'
 import loginRouter from './routes/loginRouter'
 
-const jwt = JWT({secret:config.JWT_SCRECT}).unless({ path:[/\/public/,/\/login/] })
+const jwt = JWT({secret:config.JWT_SCRECT}).unless({ path:[/^\/public/, /^\/login/] })
 
 // error handler
 onerror(app)
@@ -30,6 +31,7 @@ const middlewares = compose([
   views(__dirname + '/views', {
     extension: 'pug'
   }),
+  errorHandler,
   jwt
 ])
 

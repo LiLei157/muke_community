@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router/index'
 import Vuelidate from 'vuelidate'
 import axios from './utils/axios'
+import './utils/validate.js'
 
 Vue.use(Vuelidate)
 Vue.config.productionTip = false

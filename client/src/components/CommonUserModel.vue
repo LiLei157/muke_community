@@ -137,10 +137,11 @@
                     ]"
                 >
                     <form class="layui-form layui-form-pane">
-                        <ValidationProvider class="layui-form-item" name="username" tag="div" rules="required" v-slot="{ errors }">
-                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-form-item">
+                            <label for="" class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
                                 <input
+                                    lay-verify="required | email"
                                     v-model="form.username"
                                     type="email"
                                     as="input"
@@ -149,9 +150,9 @@
                                     placeholder="请输入用户名"
                                     autocomplete
                                 />
-                                </div>
-                            <span style="color:red">{{errors[0]}}</span>
-                        </ValidationProvider>
+                            </div>
+                        </div>
+
                         <div
                             class="layui-form-item"
                             v-if="routerParam === 'register'"
@@ -161,10 +162,10 @@
                                 >
                                 <div class="layui-input-inline">
                                     <input
+                                        lay-verify="required"
                                         label="昵称"
                                         requir
                                         v-model="form.name"
-                                        :error-message="errors[0]"
                                         type="text"
                                         class="layui-input"
                                         placeholder="请输入昵称"
@@ -206,12 +207,14 @@
                             >
                             <div class="layui-input-inline">
                                 <input
+                                    v-model="form.code"
                                     type="text"
                                     class="layui-input"
                                     placeholder="请输入验证码"
                                     autocomplete
                                 />
                             </div>
+                            <span v-html="svg" @click="changeCode"></span>
                         </div>
 
                         <div class="layui-form-item">
@@ -233,10 +236,10 @@
 <script >
 import uuid4 from "uuid/dist/v4";
 import { required, email } from "vuelidate/lib/validators";
-import { ValidationProvider } from "vee-validate";
+// import { ValidationProvider } from "vee-validate";
 export default {
     components: {
-        ValidationProvider,
+        // ValidationProvider,
     },
     data() {
         return {
@@ -313,7 +316,10 @@ export default {
                     name: this.form.name,
                 })
                 .then((res) => {
-                    console.log(res.data.data);
+                    switch(res.data.code){
+                        case 200:
+                            this.$router.push({name:'login'})
+                    }
                 });
         },
     },

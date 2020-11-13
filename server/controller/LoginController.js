@@ -38,9 +38,41 @@ class LoginController{
         }
     }
     async register(ctx){
-        ctx.body = {
-            code:200,
-            msg:'register success'
+        const body = ctx.request.body
+        // 判断验证码是否正确
+        let res = await checkCode(body.sid,body.code)
+        if(res){
+            // 查库，如果查到数据，账户已存在
+            let findRes = await User.findOne({username:body.username})
+            if(findRes != null){
+                ctx.body = {
+                    code:-1,
+                    msg:'用户已存在'
+                }
+                return 
+            }
+            let createRes = await User.create({
+                username:body.username,
+                password:body.password,
+                name:body.name
+            })
+            if(createRes){
+                const {_id,username,name} = createRes
+                ctx.body = {
+                    code:200,
+                    msg:'注册成功',
+                    data:{
+                        _id,
+                        username,
+                        name
+                    }
+                }
+            }
+        }else{
+            ctx.body = {
+                code:-1,
+                msg:'图片验证码错误'
+            }
         }
     }
 }

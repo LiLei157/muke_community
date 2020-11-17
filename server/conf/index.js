@@ -11,6 +11,9 @@ const MONGODB_NAME = process.env.DB_NAME || 'admin'
 
 // 连接mongodb url
 const DB_URL = `mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOSTNAME}:${MONGODB_PORT}/${MONGODB_NAME}`
+
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'localhost:3000'
+
 // redis配置
 const REDIS = {
     host:process.env.REDIS_HOST || '127.0.0.1',
@@ -27,6 +30,7 @@ export default {
     MONGODB_HOSTNAME,
     MONGODB_PORT,
     MONGODB_NAME,
+    baseUrl,
     DB_URL,
     REDIS,
     JWT_SECRET

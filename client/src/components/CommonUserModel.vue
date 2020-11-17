@@ -10,10 +10,18 @@
                     登录
                 </li>
                 <li
+                    v-if="routerParam !== 'forgetPwd'"
                     :class="{ 'layui-this': routerParam === 'register' }"
                     @click="$router.push({ name: 'register' })"
                 >
                     注册
+                </li>
+                <li
+                    v-if="routerParam === 'forgetPwd'"
+                    :class="{ 'layui-this': routerParam === 'register' }"
+                    @click="$router.push({ name: 'register' })"
+                >
+                    忘记密码
                 </li>
             </ul>
             <div class="layui-tab-content">
@@ -126,6 +134,8 @@
                             <button class="layui-btn" @click="submitLogin">
                                 立即登录
                             </button>
+
+                            <router-link style="margin-left:30px" :to="{name:'/forgetPwd'}">忘记密码?</router-link>
                         </div>
                     </form>
                 </div>

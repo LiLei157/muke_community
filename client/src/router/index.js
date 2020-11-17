@@ -24,6 +24,11 @@ const router = new Router({
             path:'/register',
             name:'register',
             component:resolve => require(['@/views/Register.vue'],resolve)
+        },
+        {
+            path:'/forgetPwd',
+            name:'forgetPwd',
+            component:resolve => require(['@/views/ForgetPassword.vue'],resolve)
         }
     ]
 })

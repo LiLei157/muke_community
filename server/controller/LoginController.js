@@ -2,8 +2,16 @@ import { checkCode } from '../common/utils'
 import jsonwebtoken from 'jsonwebtoken'
 import User from '../model/User'
 import config from '../conf/index'
+import send from '../conf/MailConf.js'
+import moment from 'moment'
+import { v4 as uuidv4 } from 'uuid';
+
 
 class LoginController{
+    /**
+     * @description: 登录相关逻辑
+     * @param {*} ctx 
+     */
     async login(ctx){
         // 接收用户数据
         // 返回token
@@ -37,6 +45,10 @@ class LoginController{
             }    
         }
     }
+    /**
+     * @description:注册逻辑
+     * @param {*} ctx 
+     */
     async register(ctx){
         const body = ctx.request.body
         // 判断验证码是否正确
@@ -75,6 +87,52 @@ class LoginController{
             }
         }
     }
+    /**
+     * @description: 忘记密码逻辑
+     * @param {*} ctx 
+     */
+    async forgetPassword(ctx){
+        // ctx.body = {
+        //     code:200,
+        //     data:ctx.request.body
+        // }
+        let body = ctx.request.body
+        let codeRes = await checkCode(body.sid,body.code)
+        if(codeRes){
+            // 验证码验证成功
+            // 验证数据库是否有此用户注册
+            let userRes = await User.findOne({username:body.username})
+			if(userRes){
+				let code = uuidv4().substr(0,4)
+				// 发送邮件
+				let result =  await send({
+					type:'reset',
+					data:{
+						username:body.username
+					},
+					code:code,
+					name:userRes.name,
+					expire:moment().add(30,'minutes').format('YYYY-MM-DD HH:mm')
+					,
+					email:body.username
+				})
+				ctx.body = {
+					code:200,
+					data:result
+				}
+			}else{
+				ctx.body = {
+					code:404,
+					msg:'该用户未注册'
+				}
+			}
+        }else{
+            ctx.body = {
+                code:200,
+                msg:'图片验证码错误!'
+            }
+        }
+    } 
 }
 
 export default new LoginController()

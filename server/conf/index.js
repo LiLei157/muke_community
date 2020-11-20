@@ -12,7 +12,7 @@ const MONGODB_NAME = process.env.DB_NAME || 'admin'
 // 连接mongodb url
 const DB_URL = `mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOSTNAME}:${MONGODB_PORT}/${MONGODB_NAME}`
 
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'localhost:3000'
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'localhost:8000'
 
 // redis配置
 const REDIS = {

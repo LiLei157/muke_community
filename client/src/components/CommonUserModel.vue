@@ -18,12 +18,13 @@
                 </li>
                 <li
                     v-if="routerParam === 'forgetPwd'"
-                    :class="{ 'layui-this': routerParam === 'register' }"
-                    @click="$router.push({ name: 'register' })"
+                    :class="{ 'layui-this': routerParam === 'forgetPwd' }"
+                    @click="$router.push({ name: 'forgetPwd' })"
                 >
                     忘记密码
                 </li>
             </ul>
+            <!-- 登录 -->
             <div class="layui-tab-content">
                 <div
                     :class="[
@@ -131,15 +132,22 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <button class="layui-btn" @click="submitLogin">
+                            <button class="layui-btn" @click="submitLogin" type="button">
                                 立即登录
                             </button>
 
-                            <router-link style="margin-left:30px" :to="{name:'/forgetPwd'}">忘记密码?</router-link>
+                            <router-link
+                                class="router-link"
+                                style="margin-left: 30px;"
+                                :to="{ name: 'forgetPwd' }"
+                                >
+                                忘记密码?
+                                </router-link
+                            >
                         </div>
                     </form>
                 </div>
-
+                <!-- 注册 -->
                 <div
                     :class="[
                         'layui-tab-item',
@@ -147,8 +155,10 @@
                     ]"
                 >
                     <form class="layui-form layui-form-pane">
-                            <div class="layui-form-item">
-                            <label for="" class="layui-form-label">用户名</label>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label"
+                                >用户名</label
+                            >
                             <div class="layui-input-inline">
                                 <input
                                     lay-verify="required | email"
@@ -167,21 +177,19 @@
                             class="layui-form-item"
                             v-if="routerParam === 'register'"
                         >
-                                <label for="" class="layui-form-label"
-                                    >昵称</label
-                                >
-                                <div class="layui-input-inline">
-                                    <input
-                                        lay-verify="required"
-                                        label="昵称"
-                                        requir
-                                        v-model="form.name"
-                                        type="text"
-                                        class="layui-input"
-                                        placeholder="请输入昵称"
-                                        autocomplete
-                                    />
-                                </div>
+                            <label for="" class="layui-form-label">昵称</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    lay-verify="required"
+                                    label="昵称"
+                                    requir
+                                    v-model="form.name"
+                                    type="text"
+                                    class="layui-input"
+                                    placeholder="请输入昵称"
+                                    autocomplete
+                                />
+                            </div>
                         </div>
                         <div class="layui-form-item">
                             <label for="" class="layui-form-label">密码</label>
@@ -237,6 +245,96 @@
                             </button>
                         </div>
                     </form>
+                </div>
+
+                <!-- 忘记密码 -->
+                <div class="layui-tab-content">
+                    <div
+                        :class="[
+                            'layui-tab-item',
+                            { 'layui-show': routerParam === 'forgetPwd' },
+                        ]"
+                    >
+                        <!-- <div>{{$v}}</div> -->
+                        <form class="layui-form layui-form-pane">
+                            <div
+                                :class="[
+                                    'layui-form-item',
+                                    {
+                                        'form-group--error':
+                                            $v.form.username.$error,
+                                    },
+                                ]"
+                            >
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        v-model.trim="$v.form.username.$model"
+                                        type="email"
+                                        class="layui-input"
+                                        placeholder="请输入用户名"
+                                        @blur="$v.form.username.$touch()"
+                                        @input="$v.form.username.$touch()"
+                                        autocomplete
+                                    />
+                                </div>
+                                <span
+                                    v-if="
+                                        $v.form.username.$dirty &&
+                                        !$v.form.username.required
+                                    "
+                                    class="layui-form-mid red"
+                                    >用户名不能为空</span
+                                >
+                                <span
+                                    v-if="
+                                        $v.form.username.required &&
+                                        !$v.form.username.email
+                                    "
+                                    class="layui-form-mid red"
+                                    >用户名格式错误</span
+                                >
+                            </div>
+
+                            <div
+                                class="layui-form-item"
+                                :class="{
+                                    'form-group--error': $v.form.code.$error,
+                                }"
+                            >
+                                <label for="" class="layui-form-label"
+                                    >验证码</label
+                                >
+                                <div class="layui-input-inline">
+                                    <input
+                                        v-model="$v.form.code.$model"
+                                        type="text"
+                                        class="layui-input"
+                                        placeholder="请输入验证码"
+                                        @blur="$v.form.code.$touch()"
+                                        @input="$v.form.code.$touch()"
+                                        autocomplete
+                                    />
+                                </div>
+                                <span v-html="svg" @click="changeCode"></span
+                                ><br />
+                                <span
+                                    class="red"
+                                    v-if="
+                                        $v.form.code.$dirty &&
+                                        !$v.form.code.required
+                                    "
+                                    >验证码不能为空</span
+                                >
+                            </div>
+
+                            <div class="layui-form-item">
+                                <button class="layui-btn" @click="submitForget" type="button">
+                                    提交
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -326,12 +424,24 @@ export default {
                     name: this.form.name,
                 })
                 .then((res) => {
-                    switch(res.data.code){
+                    switch (res.data.code) {
                         case 200:
-                            this.$router.push({name:'login'})
+                            this.$router.push({ name: "login" });
                     }
                 });
         },
+        submitForget(){
+            console.log('忘记密码提交');
+            console.log(this.form.username,this.form.code);
+            let sid = sessionStorage.getItem('sid')
+            this.axios.post('/login/forgetPwd',{
+                sid:sid,
+                username:this.form.username,
+                code:this.form.code
+            }).then(res =>{
+                console.log(res);
+            })
+        }
     },
 };
 </script>

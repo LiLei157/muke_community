@@ -40,5 +40,8 @@ export default {
     background-color: #f2f2f2;
     padding-top: 15px;
   }
+  .router-link:hover{
+    color:#009688
+  }
 }
 </style>

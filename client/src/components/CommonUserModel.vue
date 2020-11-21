@@ -333,6 +333,10 @@
                                     提交
                                 </button>
                             </div>
+                            <div class="test">
+                                <canvas id="canvas"></canvas>
+
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -344,6 +348,7 @@
 <script >
 import uuid4 from "uuid/dist/v4";
 import { required, email } from "vuelidate/lib/validators";
+import qrcode from 'qrcode'
 // import { ValidationProvider } from "vee-validate";
 export default {
     components: {
@@ -384,8 +389,15 @@ export default {
             sid = uuid4();
             sessionStorage.setItem("sid", sid);
         }
+        // this.getQrcode();
     },
     methods: {
+        getQrcode(){
+            var canvas = document.getElementById('canvas')
+            console.log('11111.....');
+            qrcode.toCanvas(canvas,'test。。。。。')
+        },
+
         submitLogin() {
             this.axios
                 .post("/login/login", {

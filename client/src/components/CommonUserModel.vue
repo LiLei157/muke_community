@@ -407,7 +407,7 @@ export default {
                     sid: sessionStorage.getItem("sid"),
                 })
                 .then((res) => {
-                    console.log(res);
+                    console.log(res)
                 });
         },
         getCode() {

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import config from '../conf/index.js'
 import {getValue} from '../conf/RedisConf'
 
 /**
@@ -20,7 +21,12 @@ const checkCode = async (key,val) =>{
         return false
     }
 }
+/* 验证jwt */
+const getJWTPayload = async (token)=>{
+	return jwt.verify(token.split(' ')[1],config.JWT_SECRET)
+}
 
 export {
-    checkCode
+    checkCode,
+	getJWTPayload
 }

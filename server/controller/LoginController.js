@@ -40,7 +40,8 @@ class LoginController{
                 let token = jsonwebtoken.sign({_id:user._id},config.JWT_SECRET,{expiresIn:'1h'})
                 ctx.body = {
                     code: 200,
-                    token:token
+                    token:token,
+					_id:user._id
                 }
             }    
         }
